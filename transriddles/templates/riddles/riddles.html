@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ну и загадки же здесь!</title>
-</head>
-<body>
-<h1>Попробуем-ка разгадать</h1>
-<br>
-<h3>
-    {{ riddle_after_translate }}
-</h3>
-<p>
-    Поговорка была переведена на {{ chain_lang }}
-</p>
-<p>
-    И получилась следующая цепочка переводов {{ chain_translations }}
-</p>
-<p>
-    А сама загадка изначально выглядит так: {{ riddle_before_translate }}
-</p>
-<div style="border: 2px black solid">
-    <a href="{{ riddles_page.riddles }}"><p style="border: 2px black solid"> Еще одну! </p></a>
-</div>
-</body>
+  </head>
+  <body>
+    <h1>Попробуем-ка разгадать</h1>
+    <br>
+    <h3>
+      {{ riddle_after_translate|first }}
+    </h3>
+    <p>
+      Поговорка была переведена на {% for i in chain_lang %} {{ i|first }} {% endfor %} языки
+    </p>
+    <p>
+      И получилась следующая цепочка переводов {% for i in chain_translations %} {{ i|first }}, {% endfor %}
+    </p>
+    <p>
+      А сама загадка изначально выглядит так: {{ riddle_before_translate|first }}. Правильный ответ: {{ riddle_before_translate|last|capfirst }}
+    </p>
+    <div>
+      <a href="{% url 'riddles_page:riddles' %}"><p style="border: 2px black solid"> Еще одну! </p></a>
+    </div>
+  </body>
 </html>

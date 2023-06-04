@@ -3,7 +3,7 @@ import requests
 import random
 import time
 
-from const import ASIAN_LANG, ARABIAN_LANG, OTHER_LANG, RIDDLES
+from .const import ASIAN_LANG, ARABIAN_LANG, OTHER_LANG, RIDDLES
 
 
 def index(request):
@@ -14,7 +14,7 @@ def index(request):
 def riddles(request):
     '''страница с загадками'''
 
-    def choice_film():
+    def choice_riddle():
         """выбираем случайный фильм из списка"""
         a = random.choice(RIDDLES)
         return a
@@ -24,13 +24,13 @@ def riddles(request):
         random_lang = random.choice(ASIAN_LANG)
         CHAIN_LANG.append(random_lang)
         payload = {
-            "q": CHOSEN_RIDDLE,
+            "q": CHOSEN_RIDDLE[0],
             "source": "ru",
             "target": random_lang[1]
         }
         response = requests.post(URL, json=payload, headers=headers)
         CHAIN_TRANSLATIONS.append(response.json()['data']['translations']['translatedText'])
-        time.sleep(3)
+        time.sleep(1)
 
     def asian_to_arabian():
         '''переводим с азиатского на случайный арабский'''
@@ -43,7 +43,7 @@ def riddles(request):
         CHAIN_LANG.append(random_lang)
         response = requests.post(URL, json=payload, headers=headers)
         CHAIN_TRANSLATIONS.append(response.json()['data']['translations']['translatedText'])
-        time.sleep(3)
+        time.sleep(1)
 
     def arabian_to_other():
         '''переводим с арабского на случайный другой'''
@@ -56,7 +56,7 @@ def riddles(request):
         CHAIN_LANG.append(random_lang)
         response = requests.post(URL, json=payload, headers=headers)
         CHAIN_TRANSLATIONS.append(response.json()['data']['translations']['translatedText'])
-        time.sleep(3)
+        time.sleep(1)
 
     def back_to_ru():
         '''переводим с другого обратно на русский'''
@@ -67,10 +67,10 @@ def riddles(request):
         }
         response = requests.post(URL, json=payload, headers=headers)
         CHAIN_TRANSLATIONS.append(response.json()['data']['translations']['translatedText'])
-        time.sleep(3)
+        time.sleep(1)
 
     # случайно выбранный фильм
-    CHOSEN_RIDDLE = choice_film()
+    CHOSEN_RIDDLE = choice_riddle()
     # список языков перевода фильма
     CHAIN_LANG = []
     # список переводов названия фильма
@@ -89,10 +89,9 @@ def riddles(request):
     back_to_ru()
     context = {
         'chain_lang': CHAIN_LANG,
-        'chosen_riddle': CHOSEN_RIDDLE,
         'chain_translations': CHAIN_TRANSLATIONS,
         'riddle_after_translate': CHAIN_TRANSLATIONS[-1],
-        'riddle_before_translate': CHAIN_TRANSLATIONS[0],
+        'riddle_before_translate': CHOSEN_RIDDLE,
         }
 
     return render(request, 'riddles/riddles.html', context)
