@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from .token import TOKEN
 from pathlib import Path
 import os
 
@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b$qzmrk0=!y2=fmip#)xf9zhrsf*a&^ne8g(tm6&+$ou8@&0nj'
+SECRET_KEY = TOKEN
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
